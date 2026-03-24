@@ -1,6 +1,6 @@
 # my117
 
-FROM rust:bullseye AS my117-builder
+FROM rust:trixie AS my117-builder
 
 WORKDIR /work
 RUN apt update && apt -y upgrade
