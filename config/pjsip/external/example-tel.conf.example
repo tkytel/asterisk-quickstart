@@ -1,0 +1,34 @@
+; ここでは以下の前提で例示しています:
+;   - 対向 PBX サーバのアドレス: tel.example-tailnet.ts.net
+;   - trunk 名 (ユーザ名): SIP-TRUNK-EXAMPLE
+;   - パスワード: SIP-TRUNK-EXAMPLE-PASSWORD
+
+[example-tel]
+type = registration
+transport=transport-udpv4
+server_uri = sip:SIP-TRUNK-EXAMPLE@tel.example-tailnet.ts.net.
+client_uri = sip:SIP-TRUNK-EXAMPLE@tel.example-tailnet.ts.net.
+outbound_auth = example-tel
+
+[example-tel]
+type = auth
+username = SIP-TRUNK-EXAMPLE
+password = SIP-TRUNK-EXAMPLE-PASSWORD
+
+[example-tel]
+type = aor
+max_contacts = 3
+contact = sip:SIP-TRUNK-EXAMPLE@tel.example-tailnet.ts.net.
+qualify_frequency = 60
+
+[example-tel]
+type = endpoint
+context = default
+allow = all
+aors = example-tel
+auth = example-tel
+
+[example-tel]
+type = identify
+endpoint = example-tel
+match = pbx.example-tailnet.ts.net

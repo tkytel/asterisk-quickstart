@@ -1,0 +1,2 @@
+; prefix に占有させる桁数を変えるときは 4 部分を編集します
+exten => _0390.,1,Dial(PJSIP/${EXTEN:4}@example-tel)
