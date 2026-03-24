@@ -1,0 +1,43 @@
+# my117
+
+FROM rust:bullseye AS my117-builder
+
+WORKDIR /work
+RUN apt update && apt -y upgrade
+RUN git clone https://github.com/metastable-void/my117
+WORKDIR /work/my117
+RUN cargo build --release
+
+# runtime
+
+FROM debian:trixie
+
+## base Asterisk installation
+RUN apt update && \
+    apt -y install \
+    build-essential \
+    wget \
+    git \
+    libedit-dev \
+    uuid-dev \
+    libjansson-dev \
+    libxml2-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    pkg-config
+
+WORKDIR /build
+RUN git clone https://github.com/asterisk/asterisk
+WORKDIR /build/asterisk
+RUN ./configure && make
+RUN make install && make samples
+
+## retrieve additional assets
+RUN	wget http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-ja-wav-1.6.1.tar.gz && \
+	mkdir -p /var/lib/asterisk/sounds/ja && \
+	tar zxfv asterisk-core-sounds-ja-wav-1.6.1.tar.gz -C /var/lib/asterisk/sounds/ja && \
+	rm -f asterisk-core-sounds-ja-wav-1.6.1.tar.gz
+COPY --from=my117-builder /work/my117/target/release/my117 /usr/local/bin/
+
+WORKDIR /var/lib/asterisk
+CMD ["/usr/sbin/asterisk", "-f"]
