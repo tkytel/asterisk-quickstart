@@ -1,0 +1,2 @@
+exten => 2525,1,Dial(PJSIP/2525)
+    same => n,Hangup()

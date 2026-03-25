@@ -1,19 +1,19 @@
-[100]
+[2525]
 type=endpoint
 transport=transport-v4udp
 context=default
 disallow=all
 allow=ulaw,alaw
-auth=100
-aors=100
+auth=2525
+aors=2525
 
-[100]
+[2525]
 type=auth
 auth_type=userpass
-username=100
-password=piyo
+username=2525
+password=niconico
 
-[100]
+[2525]
 type=aor
 max_contacts=1
 remove_existing=yes
