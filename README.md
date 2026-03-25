@@ -20,6 +20,9 @@ Provisioning Asterisk Private Branch Exchange
 
 ## Appendix
 
+* Tailscale sidecar container
+    * 既定の状態では Tailscale を sidecar container として、ホスト側の Tailscale インスタンスをシェアする必要のないようになっています。
+    * Tailscale を使用しない、またはホスト側の tailscaled からサービスを共有する場合は、compose.yaml から tailscale-pbx サービスを削除することで対応できます。
 * 外接
     * 他局を受け付けるための inbound trunk は設定済みです。 \
         @ `config/pjsip/internal/trunk-inbound.conf`
@@ -32,3 +35,8 @@ Provisioning Asterisk Private Branch Exchange
         @ `config/extensions/applications/*.conf`
         * my117: 内線番号 117 にコールすると、時報が再生されます。
         * hello-world: 内線番号 123 にコールすると、Hello world! と話します。
+* アップデート
+    * このリポジトリの更新を取り入れるには、以下のようにしてください。
+        ```
+        $ docker compose pull && docker compose up -d --remove-orphans
+        ```
