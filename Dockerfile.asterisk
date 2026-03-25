@@ -3,19 +3,18 @@
 FROM rust:trixie AS my117-builder
 
 WORKDIR /work
-RUN apt update && apt -y upgrade
-RUN git clone https://github.com/metastable-void/my117
+RUN git clone --depth 1 https://github.com/metastable-void/my117
 WORKDIR /work/my117
 RUN cargo build --release
 
-# runtime
+# asterisk build
 
-FROM debian:trixie
+FROM debian:trixie AS asterisk-builder
 
-## base Asterisk installation
-RUN apt update && \
-    apt -y install \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     build-essential \
+    ca-certificates \
     wget \
     git \
     libedit-dev \
@@ -25,21 +24,73 @@ RUN apt update && \
     libsqlite3-dev \
     libssl-dev \
     pkg-config \
-    libxslt-dev
+    libxslt-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
-RUN git clone https://github.com/asterisk/asterisk
+RUN git clone --depth 1 https://github.com/asterisk/asterisk
 WORKDIR /build/asterisk
-RUN ./configure && make
-RUN make install && make samples
+RUN ./configure && \
+    make -j"$(nproc)" && \
+    make install && \
+    make samples
 RUN sed -i 's/^country=.*/country=jp/' /etc/asterisk/indications.conf
 
-## retrieve additional assets
-RUN	wget http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-ja-wav-1.6.1.tar.gz && \
-	mkdir -p /var/lib/asterisk/sounds/ja && \
-	tar zxfv asterisk-core-sounds-ja-wav-1.6.1.tar.gz -C /var/lib/asterisk/sounds/ja && \
-	rm -f asterisk-core-sounds-ja-wav-1.6.1.tar.gz
+RUN wget -O /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-ja-wav-1.6.1.tar.gz && \
+    mkdir -p /var/lib/asterisk/sounds/ja && \
+    tar zxf /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz -C /var/lib/asterisk/sounds/ja && \
+    rm -f /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz
+
+# runtime
+
+FROM debian:trixie-slim
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libbsd0 \
+    libcurl4t64 \
+    libedit2 \
+    libgsm1 \
+    libiksemel3 \
+    libjansson4 \
+    liblua5.4-0 \
+    liblzma5 \
+    libmd0 \
+    libncurses6 \
+    libncursesw6 \
+    libneon27t64 \
+    libnewt0.52 \
+    libodbc2 \
+    libogg0 \
+    libpq5 \
+    libsasl2-2 \
+    libspeexdsp1 \
+    libsqlite3-0 \
+    libssl3t64 \
+    libstdc++6 \
+    libtinfo6 \
+    liburiparser1 \
+    libuuid1 \
+    libvorbis0a \
+    libvorbisenc2 \
+    libxml2 \
+    libxslt1.1 \
+    libzstd1 \
+    zlib1g && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=asterisk-builder /usr/sbin/asterisk /usr/sbin/asterisk
+COPY --from=asterisk-builder /usr/lib/asterisk /usr/lib/asterisk
+COPY --from=asterisk-builder /usr/lib/libasteriskpj.so* /usr/lib/
+COPY --from=asterisk-builder /usr/lib/libasteriskssl.so* /usr/lib/
+COPY --from=asterisk-builder /etc/asterisk /etc/asterisk
+COPY --from=asterisk-builder /var/lib/asterisk /var/lib/asterisk
+COPY --from=asterisk-builder /var/log/asterisk /var/log/asterisk
+COPY --from=asterisk-builder /var/spool/asterisk /var/spool/asterisk
 COPY --from=my117-builder /work/my117/target/release/my117 /usr/local/bin/
+
+RUN ldconfig
 
 WORKDIR /var/lib/asterisk
 CMD ["/usr/sbin/asterisk", "-f"]
