@@ -1,32 +1,11 @@
 services:
-  tailscale:
-    container_name: tailscale-pbx
-    image: tailscale/tailscale:latest
-    ports:
-      - "8443:8443"
-      - "5060:5060/tcp"
-      - "5060:5060/udp"
-      - "5061:5061/tcp"
-      - "10000-10800:10000-10800/udp"
-    hostname: asterisk
-    privileged: true
-    env_file: .env
-    environment:
-      - TS_STATE_DIR=/var/lib/tailscale
-      - TS_USERSPACE=false
-    cap_add:
-      - net_admin
-      - sys_module
-    volumes:
-      - ./tailscale:/var/lib/tailscale
-
   asterisk:
     container_name: asterisk
     build:
       context: .
       dockerfile: Dockerfile.asterisk
     image: "ghcr.io/tkytel/asterisk-quickstart"
-    network_mode: "container:tailscale-pbx"
+    network_mode: host
     cap_add:
       - NET_ADMIN
     tty: true
