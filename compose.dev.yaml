@@ -21,7 +21,11 @@ services:
       - ./tailscale:/var/lib/tailscale
 
   asterisk:
-    image: "ghcr.io/tkytel/asterisk:latest"
+    container_name: asterisk
+    build:
+      context: .
+      dockerfile: Dockerfile.asterisk
+    image: "ghcr.io/tkytel/asterisk-quickstart"
     network_mode: "container:tailscale-pbx"
     cap_add:
       - NET_ADMIN
