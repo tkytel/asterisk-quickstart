@@ -24,13 +24,15 @@ RUN apt update && \
     libxml2-dev \
     libsqlite3-dev \
     libssl-dev \
-    pkg-config
+    pkg-config \
+    libxslt-dev
 
 WORKDIR /build
 RUN git clone https://github.com/asterisk/asterisk
 WORKDIR /build/asterisk
 RUN ./configure && make
 RUN make install && make samples
+RUN sed -i 's/^country=.*/country=jp/' /etc/asterisk/indications.conf
 
 ## retrieve additional assets
 RUN	wget http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-ja-wav-1.6.1.tar.gz && \
