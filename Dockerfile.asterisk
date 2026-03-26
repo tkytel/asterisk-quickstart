@@ -22,13 +22,14 @@ RUN apt-get update && \
     libjansson-dev \
     libxml2-dev \
     libsqlite3-dev \
+    libspandsp-dev \
     libssl-dev \
     pkg-config \
     libxslt-dev && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
-RUN git clone --depth 1 https://github.com/asterisk/asterisk
+RUN git clone --depth 1 --branch 23 https://github.com/asterisk/asterisk
 WORKDIR /build/asterisk
 RUN ./configure && \
     make -j"$(nproc)" && \
@@ -77,6 +78,7 @@ RUN apt-get update && \
     libxml2 \
     libxslt1.1 \
     libzstd1 \
+    libspandsp-dev \
     zlib1g && \
     rm -rf /var/lib/apt/lists/*
 
