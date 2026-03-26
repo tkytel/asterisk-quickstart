@@ -10,8 +10,8 @@ Provisioning Asterisk Private Branch Exchange
     ```
 2. 内線番号を 1 つ以上設定します
     * 次のファイルを参考にしてください:
-        * `config/pjsip/internal/100.conf`
-        * `config/extensions/telephones/100.conf`
+        * `config/pjsip/internal/` 配下の例示ファイル
+        * `config/extensions/telephones` 配下の例示ファイル
 3. (任意) 外部プロバイダを 1 つ以上設定します
     * 次のファイルを参考にしてください:
         * `config/pjsip/external/example-tel.conf.example`

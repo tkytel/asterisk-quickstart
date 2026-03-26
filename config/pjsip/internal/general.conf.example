@@ -1,3 +1,9 @@
+; 特別なケアを必要としない SIP クライアント向けの config
+; e.g. MicroSIP, Linphone, YAMAHA RT57i, etc.
+;
+; 内線番号は 2525 となる前提で記述しています
+;
+
 [2525]
 type=endpoint
 transport=transport-v4udp
