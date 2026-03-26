@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile.asterisk
     image: "ghcr.io/tkytel/asterisk-quickstart"
     network_mode: host
+    environment:
+      - TZ=Asia/Tokyo
     cap_add:
       - NET_ADMIN
     tty: true
@@ -17,3 +19,4 @@ services:
       - ./config/musiconhold.conf:/etc/asterisk/musiconhold.conf
       - ./config/pjsip:/etc/asterisk/pjsip
       - ./config/pjsip.conf:/etc/asterisk/pjsip.conf
+      - /etc/localtime:/etc/localtime:ro

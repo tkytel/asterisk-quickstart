@@ -2,10 +2,13 @@ services:
   asterisk:
     image: "ghcr.io/tkytel/asterisk:latest"
     network_mode: host
+    environment:
+      - TZ=Asia/Tokyo
     cap_add:
       - NET_ADMIN
     tty: true
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./config/extensions:/etc/asterisk/extensions
       - ./config/extensions.conf:/etc/asterisk/extensions.conf
       - ./config/logger/logger.conf:/etc/asterisk/logger.conf
