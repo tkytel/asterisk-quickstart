@@ -8,6 +8,8 @@ on:
     paths-ignore:
       - '*.md'
       - '**/*.md'
+      - '*.conf.example'
+      - '**/*.conf.example'
 
 env:
   REGISTRY_IMAGE: ghcr.io/tkytel/asterisk
