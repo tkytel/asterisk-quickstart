@@ -1,6 +1,7 @@
 services:
   asterisk:
     container_name: asterisk
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile.asterisk

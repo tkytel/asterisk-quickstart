@@ -1,6 +1,7 @@
 services:
   asterisk:
     image: "ghcr.io/tkytel/asterisk:latest"
+    restart: always
     network_mode: host
     environment:
       - TZ=Asia/Tokyo
