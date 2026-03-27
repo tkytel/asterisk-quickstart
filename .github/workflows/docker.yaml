@@ -10,6 +10,8 @@ on:
       - '**/*.md'
       - '*.conf.example'
       - '**/*.conf.example'
+      - '**/*.conf'
+      - '**/*/*.conf'
 
 env:
   REGISTRY_IMAGE: ghcr.io/tkytel/asterisk
