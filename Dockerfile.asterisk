@@ -26,13 +26,16 @@ RUN apt-get update && \
     libspandsp-dev \
     libspeex-dev \
     libssl-dev \
+    libopus-dev \
+    libopusfile-dev \
+    libopusenc-dev \
     pkg-config \
     libspeexdsp-dev \
     libxslt-dev && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
-RUN git clone --depth 1 --branch releases/23 https://github.com/asterisk/asterisk
+RUN git clone --depth 1 --branch 23.2.2 https://github.com/asterisk/asterisk
 WORKDIR /build/asterisk
 RUN ./configure && \
     make -j"$(nproc)" && \
@@ -45,9 +48,8 @@ RUN wget -O /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz http://downloads.aster
     tar zxf /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz -C /var/lib/asterisk/sounds/ja && \
     rm -f /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz
 
-# runtime
 
-FROM debian:trixie-slim
+FROM debian:trixie-slim AS runner
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -60,14 +62,18 @@ RUN apt-get update && \
     libjansson4 \
     liblua5.4-0 \
     liblzma5 \
-    libspeexdsp-dev \
-    libspeex-dev \
     libmd0 \
     libncurses6 \
     libncursesw6 \
     libneon27t64 \
     libnewt0.52 \
+    libopus0 \
+    libopusfile0 \
+    libopusenc0 \
     libodbc2 \
+    libspeexdsp-dev \
+    libspeex-dev \
+    libspandsp-dev \
     libogg0 \
     libpq5 \
     libsasl2-2 \
@@ -80,6 +86,7 @@ RUN apt-get update && \
     libuuid1 \
     libvorbis0a \
     libvorbisenc2 \
+    libvorbisfile3 \
     libxml2 \
     libxslt1.1 \
     libzstd1 \
