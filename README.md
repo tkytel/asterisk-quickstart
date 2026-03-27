@@ -38,5 +38,8 @@ Provisioning Asterisk Private Branch Exchange
 * アップデート
     * このリポジトリの更新を取り入れるには、以下のようにしてください。
         ```
-        $ docker compose pull && docker compose up -d --remove-orphans
+        $ git stash # ローカルの変更を、一旦棚に上げる
+        $ git pull
+        $ git stash pop # 棚上げした変更を戻す
+        $ docker compose pull && docker compose up -d --remove-orphans # 最新のイメージで再起動する
         ```
