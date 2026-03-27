@@ -35,6 +35,7 @@ Provisioning Asterisk Private Branch Exchange
         * hop: 局間 hop 機能を提供します。
         * reads-back-number: 数秒間ダイヤルトーンを受け付け、聞き取った番号を読み上げます。
         * receive-fax: Fax を受信して、サーバに保存します。
+        * echo-test: オウム返しします。
 * アップデート
     * このリポジトリの更新を取り入れるには、以下のようにしてください。
         ```
