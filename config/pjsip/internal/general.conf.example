@@ -10,6 +10,7 @@ transport=transport-v4udp
 context=default
 disallow=all
 allow=ulaw,alaw
+language=ja
 auth=2525
 aors=2525
 
