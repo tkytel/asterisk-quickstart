@@ -23,8 +23,10 @@ RUN apt-get update && \
     libxml2-dev \
     libsqlite3-dev \
     libspandsp-dev \
+    libspeex-dev \
     libssl-dev \
     pkg-config \
+    libspeexdsp-dev \
     libxslt-dev && \
     rm -rf /var/lib/apt/lists/*
 
@@ -57,6 +59,8 @@ RUN apt-get update && \
     libjansson4 \
     liblua5.4-0 \
     liblzma5 \
+    libspeexdsp-dev \
+    libspeex-dev \
     libmd0 \
     libncurses6 \
     libncursesw6 \
