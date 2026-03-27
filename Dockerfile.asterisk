@@ -20,6 +20,7 @@ RUN apt-get update && \
     libedit-dev \
     uuid-dev \
     libjansson-dev \
+    libvorbis-dev \
     libxml2-dev \
     libsqlite3-dev \
     libspandsp-dev \
@@ -31,7 +32,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
-RUN git clone --depth 1 --branch 23 https://github.com/asterisk/asterisk
+RUN git clone --depth 1 --branch releases/23 https://github.com/asterisk/asterisk
 WORKDIR /build/asterisk
 RUN ./configure && \
     make -j"$(nproc)" && \
