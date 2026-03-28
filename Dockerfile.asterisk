@@ -38,7 +38,8 @@ RUN apt-get update && \
 WORKDIR /build
 RUN git clone --depth 1 --branch 23.2.2 https://github.com/asterisk/asterisk
 WORKDIR /build/asterisk
-RUN ./configure && \
+RUN ./configure \
+    --disable-xmldoc && \
     make menuselect.makeopts && \
     menuselect/menuselect --enable CORE-SOUNDS-JA-WAV menuselect.makeopts && \
     make -j"$(nproc)" && \
