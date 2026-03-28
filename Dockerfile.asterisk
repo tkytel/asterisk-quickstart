@@ -1,15 +1,16 @@
 # my117
 
-FROM rust:trixie AS my117-builder
+FROM rust:slim-trixie AS my117-builder
 
 WORKDIR /work
+RUN apt update && apt -y install git
 RUN git clone --depth 1 https://github.com/metastable-void/my117
 WORKDIR /work/my117
 RUN cargo build --release
 
 # asterisk build
 
-FROM debian:trixie AS asterisk-builder
+FROM debian:trixie-slim AS asterisk-builder
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
