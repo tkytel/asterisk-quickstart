@@ -39,15 +39,12 @@ WORKDIR /build
 RUN git clone --depth 1 --branch 23.2.2 https://github.com/asterisk/asterisk
 WORKDIR /build/asterisk
 RUN ./configure && \
+    make menuselect.makeopts && \
+    menuselect/menuselect --enable CORE-SOUNDS-JA-WAV menuselect.makeopts && \
     make -j"$(nproc)" && \
     make install && \
     make samples
 RUN sed -i 's/^country=.*/country=jp/' /etc/asterisk/indications.conf
-
-RUN wget -O /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-ja-wav-1.6.1.tar.gz && \
-    mkdir -p /var/lib/asterisk/sounds/ja && \
-    tar zxf /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz -C /var/lib/asterisk/sounds/ja && \
-    rm -f /tmp/asterisk-core-sounds-ja-wav-1.6.1.tar.gz
 
 
 FROM debian:trixie-slim AS runner
