@@ -1,0 +1,42 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    hostname: asterisk-ts
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - tailscale-state:/var/lib/tailscale
+    environment:
+      - TS_AUTHKEY=tskey-auth-MikanChanIsAlwaysWatchingYou
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_ACCEPT_DNS=true
+      - TS_AUTH_ONCE=false
+      - TS_USERSPACE=false
+    restart: unless-stopped
+
+  asterisk:
+    image: "ghcr.io/tkytel/asterisk:latest"
+    cap_add:
+      - NET_ADMIN
+    container_name: asterisk
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Tokyo
+    tty: true
+    depends_on:
+      - tailscale
+    network_mode: service:tailscale
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config/extensions:/etc/asterisk/extensions
+      - ./config/extensions.conf:/etc/asterisk/extensions.conf
+      - ./config/logger/logger.conf:/etc/asterisk/logger.conf
+      - ./config/modules.conf:/etc/asterisk/modules.conf
+      - ./config/musiconhold.conf:/etc/asterisk/musiconhold.conf
+      - ./config/pjsip:/etc/asterisk/pjsip
+      - ./config/pjsip.conf:/etc/asterisk/pjsip.conf
+
+volumes:
+  tailscale-state:
