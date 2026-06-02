@@ -1,15 +1,12 @@
 services:
   tailscale:
     image: tailscale/tailscale:latest
-    container_name: tailscale
-    hostname: asterisk-ts
     cap_add:
       - NET_ADMIN
       - NET_RAW
     volumes:
       - tailscale-state:/var/lib/tailscale
     environment:
-      - TS_AUTHKEY=tskey-auth-MikanChanIsAlwaysWatchingYou
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_ACCEPT_DNS=true
       - TS_AUTH_ONCE=false
@@ -20,7 +17,6 @@ services:
     image: "ghcr.io/tkytel/asterisk:latest"
     cap_add:
       - NET_ADMIN
-    container_name: asterisk
     restart: unless-stopped
     environment:
       - TZ=Asia/Tokyo
